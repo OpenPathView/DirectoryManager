@@ -33,13 +33,8 @@ You should consider install this beauty in a virtualenv ^^.
 ### I want to install this beauty
 
 ```
-python setup.py install
-```
-
-### I want correct all bugs that you leave in your code... / extend functionalities
-
-```
 pip3 install -r requirements.txt
+python setup.py install
 ```
 
 ## How to run it
