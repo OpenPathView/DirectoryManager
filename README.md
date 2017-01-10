@@ -129,6 +129,8 @@ curl -X GET  http://127.0.0.1:5000/v1/ls
 * Add log
 * Make this thing beautiful
 * Handle specific exception for the project
+* Improve http storage service
+* Write documentation
 
 ## License
 
