@@ -53,8 +53,6 @@ class StorageServiceManager:
         :param protocol: protocol associate with URI, if none return the default one
         :return: string, URI
         """
-        print(protocol)
-        print(self.__uris)
         with self.__lock:
             if protocol is None or protocol not in self.__uris:
                 return self.__uris[self.__default_protocol]

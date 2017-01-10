@@ -23,6 +23,7 @@ import socket
 import configparser
 from flask import Flask
 import argparse
+from gevent.wsgi import WSGIServer
 from opv_directorymanager import LocalStorage
 from opv_directorymanager import FTP
 from opv_directorymanager import LocalStorageService
@@ -112,7 +113,8 @@ def web(config, host, port):
         except Exception as e:
             return str(e), 500
 
-    app.run(host=host, port=port, threaded=True)
+    http_server = WSGIServer((host, port), app)
+    http_server.serve_forever()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
