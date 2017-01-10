@@ -95,19 +95,19 @@ opv_dm_web.py -o 127.0.0.1 -p 5000
 ### Create a new directory and get his UID
 
 ```
-$ curl -X POST http://127.0.0.1:5000/directory
+$ curl -X POST http://127.0.0.1:5000/v1/directory
 MonZolieID-1-021e88ee-d6bd-11e6-8aa9-f46d0424e365
 ```
 
 ### Get the directory URI by is UID
 
 ```
-curl -X GET http://127.0.0.1:5000/directory/MonZolieID-1-021e88ee-d6bd-11e6-8aa9-f46d0424e365
+curl -X GET http://127.0.0.1:5000/v1/directory/MonZolieID-1-021e88ee-d6bd-11e6-8aa9-f46d0424e365
 ftp://127.0.1.1:2121/MonZolieID-1-021e88ee-d6bd-11e6-8aa9-f46d0424e365
 ```
 Or if you want to specify another protocol (accecpted protocl [ftp, file])
 ```
-curl -X GET http://127.0.0.1:5000/directory/MonZolieID-1-021e88ee-d6bd-11e6-8aa9-f46d0424e365/file
+curl -X GET http://127.0.0.1:5000/v1/directory/MonZolieID-1-021e88ee-d6bd-11e6-8aa9-f46d0424e365/file
 file:///home/christophe/Documents/MDL/OPV/FileManager/tests/MonZolieID-1-021e88ee-d6bd-11e6-8aa9-f46d0424e365
 ```
 
