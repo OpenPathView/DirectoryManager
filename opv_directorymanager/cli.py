@@ -18,7 +18,7 @@
 import configparser
 from opv_directorymanager import LocalStorage
 from opv_directorymanager import FTP
-from opv_directorymanager import FileManager
+from opv_directorymanager import DirectoryManager
 from opv_directorymanager import BasicIDGenerator
 from opv_directorymanager import StorageServiceManager
 
@@ -49,7 +49,7 @@ def cli(ID, path, host, port):
     # On démarre le serveur
     storage_service.start()
 
-    fm = FileManager("ID", path, storage, uid_generator, storage_service_manager)
+    fm = DirectoryManager("ID", path, storage, uid_generator, storage_service_manager)
 
     while True:
         # On demande quelle URI otpenir

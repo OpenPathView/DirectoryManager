@@ -26,7 +26,7 @@ import argparse
 from opv_directorymanager import LocalStorage
 from opv_directorymanager import FTP
 from opv_directorymanager import LocalStorageService
-from opv_directorymanager import FileManager
+from opv_directorymanager import DirectoryManager
 from opv_directorymanager import BasicIDGenerator
 from opv_directorymanager import StorageServiceManager
 
@@ -83,7 +83,7 @@ def web(config, host, port):
     # On démarre le serveur FTP
     storage_service.start()
 
-    fm = FileManager(ID, path, storage, uid_generator, storage_service_manager)
+    fm = DirectoryManager(ID, path, storage, uid_generator, storage_service_manager)
 
     app = Flask(__name__)
 

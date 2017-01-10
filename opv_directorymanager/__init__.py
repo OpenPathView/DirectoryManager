@@ -18,7 +18,7 @@
 from opv_directorymanager.uid import *
 from opv_directorymanager.storage import *
 from opv_directorymanager.storage_service import *
-from opv_directorymanager.filemanager import FileManager
+from opv_directorymanager.directorymanager import DirectoryManager
 from opv_directorymanager.storage_service_manager import StorageServiceManager
 
 __version__ = "0.1.0"

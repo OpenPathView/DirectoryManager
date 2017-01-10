@@ -16,6 +16,8 @@
 # Email: christophe.nouchet@openpathview.fr
 # Description: You must implement a least one Storage for creating directory
 
+import threading
+
 
 class Storage:
     """
@@ -23,7 +25,18 @@ class Storage:
     """
 
     def __init__(self):
-        self._cache = []
+        self.__lock = threading.Lock()
+        self.__cache = []
+
+    @property
+    def _cache(self):
+        with self.__lock:
+            return self.__cache
+
+    @_cache.setter
+    def _cache(self, cache):
+        with self.__lock:
+            self.__cache = cache
 
     def mkdir(self, directory, options=None):
         """

@@ -23,7 +23,7 @@
 import os
 
 
-class FileManager:
+class DirectoryManager:
     """
     OPV FileManager
     """

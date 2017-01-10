@@ -1,1 +1,7 @@
 .idea/
+*.pyc
+*__pycache__
+pyftpd.log
+build/
+dist/
+opv_directorymanager.egg-info/

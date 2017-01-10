@@ -33,13 +33,7 @@ class BasicIDGenerator(UIDGenerator):
     def prefix(self):
         return self.__prefix
 
-    @prefix.setter
-    def prefix(self, prefix):
-        self.__prefix = prefix
-
     def getUID(self):
-        self.__lock.acquire()
-        self.__inc += 1
-        tmp = "%s-%s-%s" % (self.prefix, self.__inc, str(uuid.uuid1()))
-        self.__lock.release()
-        return tmp
+        with self.__lock:
+            self.__inc += 1
+            return "%s-%s-%s" % (self.prefix, self.__inc, str(uuid.uuid1()))

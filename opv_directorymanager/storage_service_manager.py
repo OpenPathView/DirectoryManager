@@ -15,6 +15,8 @@
 # Contributors: Nouchet Christophe
 # Email: christophe.nouchet@openpathview.fr
 
+import threading
+
 
 class StorageServiceManager:
     """
@@ -28,8 +30,10 @@ class StorageServiceManager:
         """
         self.__uris = {}
         self.__default_protocol = protocol
+        self.__lock = threading.Lock()
         # Add default URI
         self.addURI(protocol, service_manager)
+
 
     def addURI(self, protocol, service_manager):
         """
@@ -40,7 +44,8 @@ class StorageServiceManager:
         """
         if protocol in self.__uris:
             raise Exception("%s already in manager" % protocol)
-        self.__uris[protocol] = service_manager
+        with self.__lock:
+            self.__uris[protocol] = service_manager
 
     def getURI(self, protocol=None):
         """
@@ -50,7 +55,8 @@ class StorageServiceManager:
         """
         print(protocol)
         print(self.__uris)
-        if protocol is None or protocol not in self.__uris:
-            return self.__uris[self.__default_protocol]
-        else:
-            return self.__uris[protocol]
+        with self.__lock:
+            if protocol is None or protocol not in self.__uris:
+                return self.__uris[self.__default_protocol]
+            else:
+                return self.__uris[protocol]
