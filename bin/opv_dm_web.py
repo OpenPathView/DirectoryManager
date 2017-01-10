@@ -41,7 +41,7 @@ if __name__ == "__main__":
         exit(0)
 
     dm = DirectoryManager()
-    dm.read_config_file(args.configfile)
+    dm.read_config_file(config_file=args.configfile)
     web = Webservice(dm, args.host, args.port)
     web.start()
 

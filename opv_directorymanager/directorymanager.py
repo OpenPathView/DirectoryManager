@@ -51,7 +51,6 @@ class DirectoryManager:
     def read_config_file(self, config_file=None):
 
         config = configparser.ConfigParser()
-
         if config_file is not None:
             config.read(os.path.realpath(config_file))
 
@@ -63,12 +62,12 @@ class DirectoryManager:
 
         # FTP configuration
         ftp_host = config.get("FTP", "host", fallback="0.0.0.0")
-        ftp_port = config.get("FTP", "port", fallback=2121)
+        ftp_port = config.getint("FTP", "port", fallback=2121)
         ftp_logfile = config.get("FTP", "logfile", fallback="opv_directory_manager_ftp.log")
 
         # HTTP configuration
         http_host = config.get("HTTP", "host", fallback="0.0.0.0")
-        http_port = config.get("HTTP", "port", fallback=5050)
+        http_port = config.getint("HTTP", "port", fallback=5050)
         http_logfile = config.get("HTTP", "logfile", fallback="opv_directory_manager_http.log")
 
         # Id

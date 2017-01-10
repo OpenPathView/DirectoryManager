@@ -34,7 +34,6 @@ class StorageServiceManager:
         # Add default URI
         self.addURI(protocol, service_manager)
 
-
     def addURI(self, protocol, service_manager):
         """
         Add storage service

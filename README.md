@@ -23,8 +23,11 @@ This software is compose by:
 
 * Storage facilities: Where the directories referenced by UID are store (by default in local)
 * Storage service: Give access to the directory to other host (by default, will use FTP, but we will need http)
+    * file : Return local path to directories
+    * ftp : Give ftp uri to acces to the directories by ftp
+    * http : Give http uri to acces to the files by http
 * UID generator: It's use to generate uniq id to reference directory in database
-* Web interface: A very simple one and not production ready (flask). This web interface is use a restful API to make directory and get URI for a UID
+* Web interface: This web interface is use a restful API to make directory and get URI for a UID
 
 ## I want to play with it
 
@@ -41,13 +44,12 @@ python setup.py install
 
 For help
 ```
-$ opv_directorymanager-web.py -h
-usage: opv_directorymanager-web.py [-h] [-c CONFIGFILE] [-o HOST] [-p PORT]
-                                   [-s]
+$ opv_dm_web.py -h
+usage: opv_dm_web.py [-h] [-c CONFIGFILE] [-o HOST] [-p PORT] [-s]
 
 optional arguments:
   -h, --help            show this help message and exit
-  -c CONFIGFILE, --config CONFIGFILE
+  -c CONFIGFILE, --configfile CONFIGFILE
                         Specify configuration file for OPV Directory Manager
   -o HOST, --host HOST  Host to listen to
   -p PORT, --port PORT  Port to listen to
@@ -57,32 +59,35 @@ optional arguments:
 
 For basic usage, I create a default configuration that can be override in configuration file:
 ```
-$ opv_directorymanager-web.py -s
+$ opv_dm_web.py -s
 
-# This configuration file is temporary, so don't suppose that the syntax will be write in stone, I will change it!
-
-# Configuration for the Directory Manager
+# Main configuration
 [OPV]
-# Path to the directory that is going to be use has parent of all our directory referencing by UID
-path=tests
+# Id of the worker
+id=First
+# Path to directory
+path=directory_manager_storage
+# Host to give with the URI. MUST BE THE HOST OF THE CURRENT COMPUTER!!!!
+# If none, will compute it.
+#host=toto.fr
 
-# The id of the worker
-id=MonZolieID
-
-# The storage service configuration (default one is FTP)
+# Storage Service
 [FTP]
-# Host return for URI, if not definied will try to compute it with the hostname
-#host=127.0.0.1
-# Host to listen for the ftp server
-hostlisten=127.0.0.1
-# Same as above but fot the port
+host=0.0.0.0
 port=2121
+logfile=opv_directory_manager_ftp.log
+
+[HTTP]
+host=0.0.0.0
+port=5050
+logfile=opv_directory_manager_http.log
+
 ```
 
 Example: The following command will create a web interface listening on 127.0.0.1:5000 and a ftp server listening on 127.0.0.1:21
 
 ```
-opv_directorymanager-web.py -o 127.0.0.1 -p 5000
+opv_dm_web.py -o 127.0.0.1 -p 5000
 ```
 
 ## API Documenation
