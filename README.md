@@ -106,6 +106,20 @@ curl -X GET http://127.0.0.1:5000/directory/MonZolieID-1-021e88ee-d6bd-11e6-8aa9
 file:///home/christophe/Documents/MDL/OPV/FileManager/tests/MonZolieID-1-021e88ee-d6bd-11e6-8aa9-f46d0424e365
 ```
 
+### List available protocol
+
+```
+curl -X GET  http://127.0.0.1:5000/v1/protocols
+["file", "http", "ftp"]
+```
+
+### List uid
+
+```
+curl -X GET  http://127.0.0.1:5000/v1/ls
+["ID-1-6f26e348-d77e-11e6-a52d-f46d0424e365"]
+```
+
 ## Todo
 
 * FINISHED IT
@@ -114,6 +128,7 @@ file:///home/christophe/Documents/MDL/OPV/FileManager/tests/MonZolieID-1-021e88e
 * Add configuration file
 * Add log
 * Make this thing beautiful
+* Handle specific exception for the project
 
 ## License
 

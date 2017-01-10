@@ -37,7 +37,7 @@ setup(
     url='https://github.com/OpenPathView/DirectoryManager',
 
     scripts=[
-        "bin/opv_directorymanager-web.py"
+        "bin/opv_dm_web.py"
     ],
 
     license="GPL3",

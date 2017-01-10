@@ -5,3 +5,6 @@ pyftpd.log
 build/
 dist/
 opv_directorymanager.egg-info/
+directory_manager_storage/
+opv_directory_manager_ftp.log
+opv_directory_manager_http.log

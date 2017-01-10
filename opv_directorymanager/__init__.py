@@ -15,10 +15,12 @@
 # Contributors: Nouchet Christophe
 # Email: christophe.nouchet@openpathview.fr
 
+from opv_directorymanager.exception import OPVDMException
 from opv_directorymanager.uid import *
 from opv_directorymanager.storage import *
 from opv_directorymanager.storage_service import *
-from opv_directorymanager.directorymanager import DirectoryManager
 from opv_directorymanager.storage_service_manager import StorageServiceManager
+from opv_directorymanager.directorymanager import DirectoryManager, default_config
+from opv_directorymanager.webservice import Webservice
 
 __version__ = "0.1.0"

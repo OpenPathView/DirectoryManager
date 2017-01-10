@@ -15,8 +15,10 @@
 # Contributors: Nouchet Christophe
 # Email: christophe.nouchet@openpathview.fr
 
-from opv_directorymanager.storage_service.StorageService import StorageService
-from opv_directorymanager.storage_service.ftp import FTP
-from opv_directorymanager.storage_service.http import HTTP
-from opv_directorymanager.storage_service.local import LocalStorageService
+
+class OPVDMException(Exception):
+    """
+    Exception
+    """
+    pass
 

@@ -19,21 +19,23 @@
 
 import socket
 import logging
-from pyftpdlib.authorizers import DummyAuthorizer
-from pyftpdlib.handlers import FTPHandler
-from pyftpdlib.servers import FTPServer
+import json
+from logging.handlers import RotatingFileHandler
+import os
+from flask import Flask
+from gevent.wsgi import WSGIServer
 from opv_directorymanager.storage_service import StorageService
 import multiprocessing as mp
 
 HOST = socket.gethostbyname(socket.gethostname())
 
 
-class FTP(StorageService):
+class HTTP(StorageService):
     """
-    FTP backend service storage
+    HTTP backend service storage
     """
 
-    def __init__(self, path, host=HOST, listen_host=HOST, listen_port=21, user=None, password=None, logfile="pyftpd.log"):
+    def __init__(self, path, host=HOST, listen_host=HOST, listen_port=5050, logfile="http.log"):
         """
         Create and configure FTP server
         :param path: Path to share
@@ -43,28 +45,35 @@ class FTP(StorageService):
         :param password: Password to use for ftp server
         :param logfile: Log file path
         """
+        self.__path = path
         self.__host = host
         self.__listen_host = listen_host
         self.__listen_port = listen_port
-        self.__user = user
-        self.__password = password
         self.__logfile = logfile
+        self.__api = "/v1/files/"
+        self.__uri = "http://%s:%s%s" % (self.__host, self.__listen_port, self.__api)
+        app = Flask("OPV-TuilesServer", static_url_path=self.__path)
 
-        authorizer = DummyAuthorizer()
+        @app.route(os.path.join(self.__api, "<path:name>"))
+        def send_file(name):
+            """
+            Will create a directory in directory manager
+            :return: The UID of the directory
+            """
+            temp = []
+            for i in name.split("/"):
+                if i != "." and i != "..":
+                    temp.append(i)
+            p = os.path.join(self.__path, "/".join(temp))
+            if os.path.isdir(p):
+                return json.dumps(os.listdir(p))
+            with open(p, "r") as fic:
+                return fic.read()
 
-        # Make the URI
-        if self.__user is not None and self.__password is not None:
-            print(self.__user, self.__password)
-            self.__uri = "ftp://%s:%s@%s:%s/" % (self.__user, self.__password, self.__host, self.__listen_port)
-            authorizer.add_user(self.__user, self.__password, path, perm='elradfmwM')
-        else:
-            self.__uri = "ftp://%s:%s/" % (self.__host, self.__listen_port)
-            authorizer.add_anonymous(path, perm='elradfmwM')
-
-        handler = FTPHandler
-        handler.authorizer = authorizer
-
-        self.__server = FTPServer((self.__listen_host, self.__listen_port), handler)
+        handler = RotatingFileHandler(self.__logfile, maxBytes=10000, backupCount=1)
+        handler.setLevel(logging.INFO)
+        app.logger.addHandler(handler)
+        self.__app = app
         self.__process = None
 
     def uri(self):
@@ -79,13 +88,17 @@ class FTP(StorageService):
         Start the FTP server
         :return:
         """
-        self.__process = mp.Process(target=self.__start_server)
+        self.__process = mp.Process(target=self._start_server)
         self.__process.start()
 
-    def __start_server(self):
+    def _start_server(self):
         """
         Actually start the FTP server
         :return:
         """
-        logging.basicConfig(filename=self.__logfile, level=logging.INFO)
-        self.__server.serve_forever()
+        http_server = WSGIServer((self.__listen_host, self.__listen_port), self.__app)
+        http_server.serve_forever()
+
+if __name__ == "__main__":
+    http = HTTP("directory_manager_storage")
+    http._start_server()

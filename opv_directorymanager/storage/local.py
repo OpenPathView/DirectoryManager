@@ -32,7 +32,7 @@ class LocalStorage(Storage):
         self.__path = os.path.realpath(os.path.expanduser(path))
         # Check if path exist otherwise make it
         if not os.path.isdir(path):
-            os.mkdir(path, mode=0o755)
+            os.makedirs(path, mode=0o755)
         self._cache = self.ls()
 
     @property

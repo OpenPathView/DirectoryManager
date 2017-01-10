@@ -21,6 +21,15 @@
 #               vais faire un petit bouchon.
 
 import os
+import configparser
+import socket
+import json
+from opv_directorymanager import LocalStorage
+from opv_directorymanager import FTP
+from opv_directorymanager import HTTP
+from opv_directorymanager import LocalStorageService
+from opv_directorymanager import BasicIDGenerator
+from opv_directorymanager import StorageServiceManager
 
 
 class DirectoryManager:
@@ -28,15 +37,65 @@ class DirectoryManager:
     OPV FileManager
     """
 
-    def __init__(self, ID, path, storage, uid_generator, storage_service_manager):
+    def __init__(self, ID=None, path=None, storage=None, uid_generator=None, storage_service_manager=None):
         """
         :param path: Path to the directory to server by backed storage
         """
-        self.__ID = ID
+        self.__id = ID
         self.__path = path
+        self.__host = None
         self.__storage = storage
         self.__uid_generator = uid_generator
         self.__storage_service_manager = storage_service_manager
+
+    def read_config_file(self, config_file=None):
+
+        config = configparser.ConfigParser()
+
+        if config_file is not None:
+            config.read(os.path.realpath(config_file))
+
+        # Main configuration
+        self.__id = config.get("OPV", "id", fallback="ID")
+        self.__path = config.get("OPV", "path", fallback="directory_manager_storage")
+        self.__path = os.path.realpath(os.path.expanduser(self.__path))
+        self.__host = config.get("OPV", "host", fallback=socket.gethostbyname(socket.gethostname()))
+
+        # FTP configuration
+        ftp_host = config.get("FTP", "host", fallback="0.0.0.0")
+        ftp_port = config.get("FTP", "port", fallback=2121)
+        ftp_logfile = config.get("FTP", "logfile", fallback="opv_directory_manager_ftp.log")
+
+        # HTTP configuration
+        http_host = config.get("HTTP", "host", fallback="0.0.0.0")
+        http_port = config.get("HTTP", "port", fallback=5050)
+        http_logfile = config.get("HTTP", "logfile", fallback="opv_directory_manager_http.log")
+
+        # Id
+        self.__uid_generator = BasicIDGenerator(self.__id)
+
+        # Storage
+        self.__storage = LocalStorage(self.__path)
+
+        # FTP
+        ftp_storage_service = FTP(
+            self.__path, host=self.__host, listen_host=ftp_host, listen_port=ftp_port, logfile=ftp_logfile
+        )
+        ftp_storage_service.start()
+
+        # HTTP
+        http_storage_service = HTTP(
+            self.__path, host=self.__host, listen_host=http_host, listen_port=http_port, logfile=http_logfile
+        )
+        http_storage_service.start()
+
+        # Local
+        local_storage_service = LocalStorageService(self.__path)
+
+        # Storage service
+        self.__storage_service_manager = StorageServiceManager("ftp", ftp_storage_service)
+        self.__storage_service_manager.addURI("file", local_storage_service)
+        self.__storage_service_manager.addURI("http", http_storage_service)
 
     # Accessor & Mutator
     @property
@@ -45,7 +104,7 @@ class DirectoryManager:
         Get the ID of the FileManager
         :return: FileManagerID
         """
-        return self.__ID
+        return self.__id
 
     @property
     def path(self):
@@ -84,3 +143,36 @@ class DirectoryManager:
             return None
         else:
             return os.path.join(self.__storage_service_manager.getURI(protocol).uri(), directory)
+
+    def ls(self):
+        """
+        List all UID in directory manager
+        :return: list of UID
+        """
+        return json.dumps(self.__storage.ls())
+
+    def protocols(self):
+        return json.dumps(self.__storage_service_manager.ls())
+
+default_config = """
+# Main configuration
+[OPV]
+# Id of the worker
+id=First
+# Path to directory
+path=/opt/OPV/directory_manager
+# Host to give with the URI. MUST BE THE HOST OF THE CURRENT COMPUTER!!!!
+# If none, will compute it.
+#host=toto.fr
+
+# Storage Service
+[FTP]
+listen_host=0.0.0.0
+listen_port=2121
+logfile=/var/log/opv_directory_manager_ftp.log
+
+[HTTP]
+listen_host=0.0.0.0
+listen_port=5050
+logfile=/var/log/opv_directory_manager_http.log
+"""

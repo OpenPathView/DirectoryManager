@@ -58,3 +58,12 @@ class StorageServiceManager:
                 return self.__uris[self.__default_protocol]
             else:
                 return self.__uris[protocol]
+
+    def ls(self):
+        """
+        Return directories
+        :return:
+        """
+        with self.__lock:
+            return [i for i in self.__uris.keys()]
+
