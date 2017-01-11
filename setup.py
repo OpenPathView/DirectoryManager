@@ -18,11 +18,9 @@ import pip
 
 # Merci Sam & Max : http://sametmax.com/creer-un-setup-py-et-mettre-sa-bibliotheque-python-en-ligne-sur-pypi/
 
-import opv_directorymanager
-
 setup(
     name='opv_directorymanager',
-    version=opv_directorymanager.__version__,
+    version="0.1.0",
     packages=find_packages(),
     author="Christophe NOUCHET",
     author_email="christophe.nouchet@openpathview.fr",
