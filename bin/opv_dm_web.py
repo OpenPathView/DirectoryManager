@@ -15,7 +15,7 @@
 
 # Contributors: Nouchet Christophe
 # Email: christophe.nouchet@openpathview.fr
-# Description: This is the test webinterface for the directory manager of Open Path View don't use this piece of sh*t
+# Description: This is the tests webinterface for the directory manager of Open Path View don't use this piece of sh*t
 # for production!
 
 import argparse

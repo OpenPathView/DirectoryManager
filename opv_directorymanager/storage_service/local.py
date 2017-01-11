@@ -33,7 +33,7 @@ class LocalStorageService:
         Do nothing
         :return:
         """
-        raise True
+        return True
 
     def uri(self):
         """

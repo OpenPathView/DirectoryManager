@@ -18,6 +18,7 @@
 
 import os
 from opv_directorymanager.storage import Storage
+from opv_directorymanager import OPVDMException
 
 
 class LocalStorage(Storage):
@@ -51,12 +52,13 @@ class LocalStorage(Storage):
         :return:
         """
         if directory.find("/") >= 0:
-            raise Exception("I don't accept directory name with '/' in name")
-        if os.path.isdir(directory):
-            raise Exception("Directory already exist")
+            raise OPVDMException("I don't accept directory name with '/' in name")
+        path = os.path.join(self.path, directory)
+        if os.path.isdir(path):
+            raise OPVDMException("Directory already exist")
 
         # Create the directory
-        os.mkdir(os.path.join(self.path, directory))
+        os.mkdir(path)
 
     def ls(self, options=None):
         """

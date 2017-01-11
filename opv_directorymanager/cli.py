@@ -60,7 +60,3 @@ def cli(ID, path, host, port):
             print(fm.new_directory())
         else:
             print(fm.directory(a))
-
-
-if __name__ == "__main__":
-    cli("ID", "/home/christophe/Documents/MDL/OPV/FileManager/test", "127.0.0.1", 2121)

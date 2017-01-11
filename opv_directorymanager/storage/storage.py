@@ -17,6 +17,7 @@
 # Description: You must implement a least one Storage for creating directory
 
 import threading
+from opv_directorymanager import OPVDMException
 
 
 class Storage:
@@ -47,7 +48,7 @@ class Storage:
         :raise: Exception if it's impossible to make directory
         """
         if self.exist(directory):
-           raise Exception("Directory already exist")
+           raise OPVDMException("Directory already exist")
 
         # Create the directory
         self._mkdir(directory, options)

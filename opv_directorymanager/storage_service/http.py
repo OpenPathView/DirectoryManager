@@ -52,7 +52,7 @@ class HTTP(StorageService):
         self.__logfile = logfile
         self.__api = "/v1/files/"
         self.__uri = "http://%s:%s%s" % (self.__host, self.__listen_port, self.__api)
-        app = Flask("OPV-TuilesServer", static_url_path=self.__path)
+        app = Flask("OPV-TuilesServer")
 
         @app.route(os.path.join(self.__api, "<path:name>"))
         def send_file(name):
