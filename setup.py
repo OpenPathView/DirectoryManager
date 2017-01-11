@@ -28,7 +28,8 @@ setup(
     long_description=open('README.md').read(),
     install_requires=[
         "flask",
-        "pyftpdlib"
+        "pyftpdlib",
+        "gevent"
     ],
     # Active la prise en compte du fichier MANIFEST.in
     include_package_data=False,
