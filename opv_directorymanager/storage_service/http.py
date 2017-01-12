@@ -25,7 +25,6 @@ import os
 from flask import Flask
 from gevent.wsgi import WSGIServer
 from opv_directorymanager.storage_service import StorageService
-import multiprocessing as mp
 
 HOST = socket.gethostbyname(socket.gethostname())
 
@@ -45,13 +44,14 @@ class HTTP(StorageService):
         :param password: Password to use for ftp server
         :param logfile: Log file path
         """
+        StorageService.__init__(self, self.__start_server)
         self.__path = path
         self.__host = host
         self.__listen_host = listen_host
         self.__listen_port = listen_port
         self.__logfile = logfile
         self.__api = "/v1/files/"
-        self.__uri = "http://%s:%s%s" % (self.__host, self.__listen_port, self.__api)
+        self._uri = "http://%s:%s%s" % (self.__host, self.__listen_port, self.__api)
         app = Flask("OPV-TuilesServer")
 
         @app.route(os.path.join(self.__api, "<path:name>"))
@@ -60,6 +60,7 @@ class HTTP(StorageService):
             Will create a directory in directory manager
             :return: The UID of the directory
             """
+            print("On est la")
             temp = []
             for i in name.split("/"):
                 if i != "." and i != "..":
@@ -74,31 +75,11 @@ class HTTP(StorageService):
         handler.setLevel(logging.INFO)
         app.logger.addHandler(handler)
         self.__app = app
-        self.__process = None
 
-    def uri(self):
-        """
-        Return URI of the FTP
-        :return: string
-        """
-        return self.__uri
-
-    def start(self):
-        """
-        Start the FTP server
-        :return:
-        """
-        self.__process = mp.Process(target=self._start_server)
-        self.__process.start()
-
-    def _start_server(self):
+    def __start_server(self):
         """
         Actually start the FTP server
         :return:
         """
         http_server = WSGIServer((self.__listen_host, self.__listen_port), self.__app)
         http_server.serve_forever()
-
-if __name__ == "__main__":
-    http = HTTP("directory_manager_storage")
-    http._start_server()

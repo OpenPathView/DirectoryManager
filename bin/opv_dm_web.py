@@ -23,6 +23,8 @@ from opv_directorymanager import Webservice, default_config
 from opv_directorymanager import DirectoryManager
 
 if __name__ == "__main__":
+
+    # Argparser setup
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "-c", "--configfile", dest="configfile", type=str, default=None,
@@ -36,12 +38,21 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
+    # Show config file example if ask
     if args.showMeExample:
         print(default_config)
         exit(0)
 
+    # Create directory manager
     dm = DirectoryManager()
+    # Read config file
     dm.read_config_file(config_file=args.configfile)
+    # Start storage services
+    dm.start_storage_service()
+
+    # Webservice
     web = Webservice(dm, args.host, args.port)
+
+    # Start webservice
     web.start()
 

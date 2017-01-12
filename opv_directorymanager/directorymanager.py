@@ -49,6 +49,13 @@ class DirectoryManager:
         self.__storage_service_manager = storage_service_manager
 
     def read_config_file(self, config_file=None):
+        """
+        Read configuration file and initialize object. If config file is None, it will use default value
+        :param config_file: path to configuration file
+        :return:
+        """
+        # Stop storage service
+        self.stop_storage_service()
 
         config = configparser.ConfigParser()
         if config_file is not None:
@@ -80,13 +87,11 @@ class DirectoryManager:
         ftp_storage_service = FTP(
             self.__path, host=self.__host, listen_host=ftp_host, listen_port=ftp_port, logfile=ftp_logfile
         )
-        ftp_storage_service.start()
 
         # HTTP
         http_storage_service = HTTP(
             self.__path, host=self.__host, listen_host=http_host, listen_port=http_port, logfile=http_logfile
         )
-        http_storage_service.start()
 
         # Local
         local_storage_service = LocalStorageService(self.__path)
@@ -95,6 +100,26 @@ class DirectoryManager:
         self.__storage_service_manager = StorageServiceManager("ftp", ftp_storage_service)
         self.__storage_service_manager.addURI("file", local_storage_service)
         self.__storage_service_manager.addURI("http", http_storage_service)
+
+    def __del__(self):
+        # Stop all storage services
+        self.stop_storage_service()
+
+    def start_storage_service(self):
+        """
+        Start storage services
+        :return:
+        """
+        if self.__storage_service_manager is not None:
+            self.__storage_service_manager.start()
+
+    def stop_storage_service(self):
+        """
+        Stop storage services
+        :return:
+        """
+        if self.__storage_service_manager is not None:
+            self.__storage_service_manager.stop()
 
     # Accessor & Mutator
     @property
@@ -141,7 +166,7 @@ class DirectoryManager:
         if directory is None or directory == "" or not self.__storage.exist(directory):
             return None
         else:
-            return os.path.join(self.__storage_service_manager.getURI(protocol).uri(), directory)
+            return os.path.join(self.__storage_service_manager.getURI(protocol).uri, directory)
 
     def ls(self):
         """
@@ -159,19 +184,19 @@ default_config = """
 # Id of the worker
 id=First
 # Path to directory
-path=/opt/OPV/directory_manager
+path=directory_manager_storage
 # Host to give with the URI. MUST BE THE HOST OF THE CURRENT COMPUTER!!!!
 # If none, will compute it.
 #host=toto.fr
 
 # Storage Service
 [FTP]
-listen_host=0.0.0.0
-listen_port=2121
-logfile=/var/log/opv_directory_manager_ftp.log
+host=0.0.0.0
+port=2121
+logfile=opv_directory_manager_ftp.log
 
 [HTTP]
-listen_host=0.0.0.0
-listen_port=5050
-logfile=/var/log/opv_directory_manager_http.log
+host=0.0.0.0
+port=5050
+logfile=opv_directory_manager_http.log
 """

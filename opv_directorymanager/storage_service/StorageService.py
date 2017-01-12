@@ -16,22 +16,59 @@
 # Email: christophe.nouchet@openpathview.fr
 # Description: StorageService is an abstract class that must be override to implement storage service
 
+from opv_directorymanager import OPVDMException
+import multiprocessing as mp
+import signal
+
 
 class StorageService:
     """
     StorageService is an abstract class for implement URI
     """
 
+    def __init__(self, fct=None):
+        self.__fct = fct
+        self.__process = mp.Process(target=self.__fct)
+        self._uri = None
+
+    def __del__(self):
+        self.stop()
+
     def start(self):
         """
         Start the service
         :return:
         """
-        raise NotImplementedError
+        if self.__fct is None:
+            return False
+        if self.is_running():
+            raise OPVDMException("Already running")
+        self.__process.start()
+        return self.is_running()
 
-    def uri(self):
+    def stop(self):
         """
-        Get the URI of the service
+        Stop the service
         :return:
         """
-        raise NotImplementedError
+
+        while self.__process.is_alive():
+            self.__process.terminate()
+            self.__process.join(timeout=3)
+            if self.__process.exitcode == -signal.SIGTERM:
+                break
+
+        return self.is_running()
+
+    def is_running(self):
+        """
+        :return: boolean
+        """
+        return self.__process.is_alive()
+
+    @property
+    def uri(self):
+        if self._uri is None:
+            raise NotImplementedError
+        return self._uri
+

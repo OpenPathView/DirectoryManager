@@ -23,7 +23,6 @@ from pyftpdlib.authorizers import DummyAuthorizer
 from pyftpdlib.handlers import FTPHandler
 from pyftpdlib.servers import FTPServer
 from opv_directorymanager.storage_service import StorageService
-import multiprocessing as mp
 
 HOST = socket.gethostbyname(socket.gethostname())
 
@@ -43,6 +42,7 @@ class FTP(StorageService):
         :param password: Password to use for ftp server
         :param logfile: Log file path
         """
+        StorageService.__init__(self, self.__start_server)
         self.__host = host
         self.__listen_host = listen_host
         self.__listen_port = listen_port
@@ -55,32 +55,16 @@ class FTP(StorageService):
         # Make the URI
         if self.__user is not None and self.__password is not None:
             print(self.__user, self.__password)
-            self.__uri = "ftp://%s:%s@%s:%s/" % (self.__user, self.__password, self.__host, self.__listen_port)
+            self._uri = "ftp://%s:%s@%s:%s/" % (self.__user, self.__password, self.__host, self.__listen_port)
             authorizer.add_user(self.__user, self.__password, path, perm='elradfmwM')
         else:
-            self.__uri = "ftp://%s:%s/" % (self.__host, self.__listen_port)
+            self._uri = "ftp://%s:%s/" % (self.__host, self.__listen_port)
             authorizer.add_anonymous(path, perm='elradfmwM')
 
         handler = FTPHandler
         handler.authorizer = authorizer
 
         self.__server = FTPServer((self.__listen_host, self.__listen_port), handler)
-        self.__process = None
-
-    def uri(self):
-        """
-        Return URI of the FTP
-        :return: string
-        """
-        return self.__uri
-
-    def start(self):
-        """
-        Start the FTP server
-        :return:
-        """
-        self.__process = mp.Process(target=self.__start_server)
-        self.__process.start()
 
     def __start_server(self):
         """

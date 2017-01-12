@@ -16,8 +16,10 @@
 # Email: christophe.nouchet@openpathview.fr
 # Description: Add support for local storage service
 
+from opv_directorymanager.storage_service import StorageService
 
-class LocalStorageService:
+
+class LocalStorageService(StorageService):
     """
     StorageService is an abstract class for implement URI
     """
@@ -26,18 +28,6 @@ class LocalStorageService:
         """
         :param path: Path to give for the URI
         """
+        StorageService.__init__(self)
         self.__path = path
-
-    def start(self):
-        """
-        Do nothing
-        :return:
-        """
-        return True
-
-    def uri(self):
-        """
-        Get the URI of the service
-        :return:
-        """
-        return "file://%s" % self.__path
+        self._uri = "file://%s" % self.__path

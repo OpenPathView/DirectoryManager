@@ -46,6 +46,24 @@ class StorageServiceManager:
         with self.__lock:
             self.__uris[protocol] = service_manager
 
+    def start(self):
+        """
+        Start all service
+        :return:
+        """
+        for i, v in self.__uris.items():
+            print("Start service : %s" % i)
+            v.start()
+
+    def stop(self):
+        """
+        Stop all service
+        :return:
+        """
+        for i, v in self.__uris.items():
+            print("Stop service : %s" % i)
+            v.stop()
+
     def getURI(self, protocol=None):
         """
         Get the URI for a protocol
