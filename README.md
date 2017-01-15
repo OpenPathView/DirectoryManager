@@ -90,6 +90,17 @@ Example: The following command will create a web interface listening on 127.0.0.
 opv_dm_web.py -o 127.0.0.1 -p 5000
 ```
 
+## Launch test
+
+You can launch unit and functionnal test with this command:
+
+```
+./launch_test.sh
+```
+
+Code coverage is avaible under directory 'htmlcov', open index.html to see the report.
+
+
 ## API Documenation
 
 ### Create a new directory and get his UID

@@ -138,10 +138,6 @@ class DirectoryManager:
         """
         return self.__path
 
-    @property
-    def uid_generator(self):
-        return self.__uid_generator
-
     def new_directory(self):
         """
         Get a new directory

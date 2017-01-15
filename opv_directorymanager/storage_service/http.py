@@ -60,7 +60,6 @@ class HTTP(StorageService):
             Will create a directory in directory manager
             :return: The UID of the directory
             """
-            print("On est la")
             temp = []
             for i in name.split("/"):
                 if i != "." and i != "..":

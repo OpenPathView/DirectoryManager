@@ -107,6 +107,9 @@ def test_ftp(directory):
     # Test that service start
     ftp.start()
 
+    with pytest.raises(OPVDMException):
+        ftp.start()
+
     # Check service is running
     assert (ftp.is_running())
 

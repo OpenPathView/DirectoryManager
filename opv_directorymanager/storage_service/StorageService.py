@@ -19,6 +19,7 @@
 from opv_directorymanager import OPVDMException
 import multiprocessing as mp
 import signal
+import os
 
 
 class StorageService:

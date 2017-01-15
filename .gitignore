@@ -12,4 +12,4 @@ opv_directory_manager_http.log
 .coverage
 htmlcov/
 http.log
-
+.coverage.*
