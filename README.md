@@ -35,6 +35,7 @@ You should consider to install it in a virtualenv.
 ### I want to install it
 
 ```
+apt-get install libffi-dev
 pip3 install -r requirements.txt
 python setup.py install
 ```
