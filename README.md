@@ -1,8 +1,7 @@
 # OPV Directory Manager
 
-** WARNING: This piece of software is not finished at all, so it (can be) is buggy **
 
-** To make this project work smoothly you must have a resolvable hostname. "hostname -i" must not return 127.0.0.1! or modify configuration file **
+**To make this project work smoothly (rechable by other host) you must have a resolvable hostname. "hostname -i" must not return 127.0.0.1! or modify configuration file**
 
 For example
 
@@ -22,18 +21,18 @@ The name is maybe too long, I'm not very good for naming thing, sorry...
 This software is compose by:
 
 * Storage facilities: Where the directories referenced by UID are store (by default in local)
-* Storage service: Give access to the directory to other host (by default, will use FTP, but we will need http)
+* Storage service: Give access to the directory to other host (by default, will use FTP)
     * file : Return local path to directories
     * ftp : Give ftp uri to acces to the directories by ftp
     * http : Give http uri to acces to the files by http
 * UID generator: It's use to generate uniq id to reference directory in database
-* Web interface: This web interface is use a restful API to make directory and get URI for a UID
+* Web interface: This web interface is use as a restful API to make directory and get URI for a UID
 
 ## I want to play with it
 
-You should consider install this beauty in a virtualenv ^^.
+You should consider to install it in a virtualenv.
 
-### I want to install this beauty
+### I want to install it
 
 ```
 pip3 install -r requirements.txt
@@ -58,7 +57,9 @@ optional arguments:
 ```
 
 For basic usage, I create a default configuration that can be override in configuration file:
+
 ```
+# Show you an example of configuration file
 $ opv_dm_web.py -s
 
 # Main configuration
@@ -84,15 +85,15 @@ logfile=opv_directory_manager_http.log
 
 ```
 
-Example: The following command will create a web interface listening on 127.0.0.1:5000 and a ftp server listening on 127.0.0.1:21
+Example: The following command will create a web interface listening on 127.0.0.1:5000 and a ftp server listening on 0.0.0.0:2121
 
 ```
 opv_dm_web.py -o 127.0.0.1 -p 5000
 ```
 
-## Launch test
+## Launch tests
 
-You can launch unit and functionnal test with this command:
+You can launch unit and functionnal tests with this command:
 
 ```
 ./launch_test.sh
@@ -116,7 +117,7 @@ MonZolieID-1-021e88ee-d6bd-11e6-8aa9-f46d0424e365
 curl -X GET http://127.0.0.1:5000/v1/directory/MonZolieID-1-021e88ee-d6bd-11e6-8aa9-f46d0424e365
 ftp://127.0.1.1:2121/MonZolieID-1-021e88ee-d6bd-11e6-8aa9-f46d0424e365
 ```
-Or if you want to specify another protocol (accecpted protocl [ftp, file])
+Or if you want to specify another protocol (accecpted protocl [ftp, file, http])
 ```
 curl -X GET http://127.0.0.1:5000/v1/directory/MonZolieID-1-021e88ee-d6bd-11e6-8aa9-f46d0424e365/file
 file:///home/christophe/Documents/MDL/OPV/FileManager/tests/MonZolieID-1-021e88ee-d6bd-11e6-8aa9-f46d0424e365
@@ -138,15 +139,9 @@ curl -X GET  http://127.0.0.1:5000/v1/ls
 
 ## Todo
 
-* FINISHED IT
-* Add Test (si ca peut nous éviter de perdre un dimanche après midi sur un script d'extraction d'image dans des SD non testé. Je dit ca je dit rien :))
-* Add a central class that handle all initialisation stuff (like instantiated storage, storage_service and UID)
-* Add configuration file
 * Add log
-* Make this thing beautiful
-* Handle specific exception for the project
-* Improve http storage service
-* Write documentation
+* Test the api
+* Write a good documentation
 
 ## License
 
