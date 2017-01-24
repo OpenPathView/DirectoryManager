@@ -109,19 +109,19 @@ Code coverage is avaible under directory 'htmlcov', open index.html to see the r
 
 ```
 $ curl -X POST http://127.0.0.1:5000/v1/directory
-MonZolieID-1-021e88ee-d6bd-11e6-8aa9-f46d0424e365
+"MonZolieID-1-021e88ee-d6bd-11e6-8aa9-f46d0424e365"
 ```
 
 ### Get the directory URI by is UID
 
 ```
 curl -X GET http://127.0.0.1:5000/v1/directory/MonZolieID-1-021e88ee-d6bd-11e6-8aa9-f46d0424e365
-ftp://127.0.1.1:2121/MonZolieID-1-021e88ee-d6bd-11e6-8aa9-f46d0424e365
+"ftp://127.0.1.1:2121/MonZolieID-1-021e88ee-d6bd-11e6-8aa9-f46d0424e365"
 ```
 Or if you want to specify another protocol (accecpted protocl [ftp, file, http])
 ```
 curl -X GET http://127.0.0.1:5000/v1/directory/MonZolieID-1-021e88ee-d6bd-11e6-8aa9-f46d0424e365/file
-file:///home/christophe/Documents/MDL/OPV/FileManager/tests/MonZolieID-1-021e88ee-d6bd-11e6-8aa9-f46d0424e365
+"file:///home/christophe/Documents/MDL/OPV/FileManager/tests/MonZolieID-1-021e88ee-d6bd-11e6-8aa9-f46d0424e365"
 ```
 
 ### List available protocol

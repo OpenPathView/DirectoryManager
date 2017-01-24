@@ -169,10 +169,10 @@ class DirectoryManager:
         List all UID in directory manager
         :return: list of UID
         """
-        return json.dumps(self.__storage.ls())
+        return self.__storage.ls()
 
     def protocols(self):
-        return json.dumps(self.__storage_service_manager.ls())
+        return self.__storage_service_manager.ls()
 
 default_config = """
 # Main configuration
