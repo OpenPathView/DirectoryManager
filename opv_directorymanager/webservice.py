@@ -15,6 +15,7 @@
 # Contributors: Nouchet Christophe
 # Email: christophe.nouchet@openpathview.fr
 
+import json
 from flask import Flask
 from gevent.wsgi import WSGIServer
 
@@ -36,7 +37,7 @@ class Webservice:
             :return: The UID of the directory
             """
             try:
-                return self.__directory_manager.new_directory()
+                return json.dumps(self.__directory_manager.new_directory())
             except Exception as e:
                 return str(e), 500
 
@@ -50,21 +51,21 @@ class Webservice:
             :return: the URI to the directory
             """
             try:
-                return self.__directory_manager.directory(uid, protocol)
+                return json.dumps(self.__directory_manager.directory(uid, protocol))
             except Exception as e:
                 return str(e), 500
 
         @app.route("/v1/ls")
         def ls():
             try:
-                return self.__directory_manager.ls()
+                return json.dumps(self.__directory_manager.ls())
             except Exception as e:
                 return str(e), 500
 
         @app.route("/v1/protocols")
         def protocols():
             try:
-                return self.__directory_manager.protocols()
+                return json.dumps(self.__directory_manager.protocols())
             except Exception as e:
                 return str(e), 500
 
