@@ -35,7 +35,7 @@ You should consider to install it in a virtualenv.
 ### I want to install it
 
 ```
-apt-get install libffi-dev
+apt-get install libffi-dev libssl-dev
 pip3 install -r requirements.txt
 python setup.py install
 ```
@@ -157,5 +157,3 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the  <br />
 GNU General Public License for more details.  <br />
 You should have received a copy of the GNU General Public License along  <br />
 with this program. If not, see <http://www.gnu.org/licenses/>.  <br />
-
-
