@@ -22,7 +22,8 @@ import logging
 import json
 from logging.handlers import RotatingFileHandler
 import os
-from flask import Flask
+from flask import Flask, send_file
+from flask_cors import CORS
 from gevent.wsgi import WSGIServer
 from opv_directorymanager.storage_service import StorageService
 
@@ -53,9 +54,10 @@ class HTTP(StorageService):
         self.__api = "/v1/files/"
         self._uri = "http://%s:%s%s" % (self.__host, self.__listen_port, self.__api)
         app = Flask("OPV-TuilesServer")
+        CORS(app)
 
         @app.route(os.path.join(self.__api, "<path:name>"))
-        def send_file(name):
+        def file_send(name):
             """
             Will create a directory in directory manager
             :return: The UID of the directory
@@ -67,8 +69,7 @@ class HTTP(StorageService):
             p = os.path.join(self.__path, "/".join(temp))
             if os.path.isdir(p):
                 return json.dumps(os.listdir(p))
-            with open(p, "r") as fic:
-                return fic.read()
+            return send_file(p)
 
         handler = RotatingFileHandler(self.__logfile, maxBytes=10000, backupCount=1)
         handler.setLevel(logging.INFO)

@@ -17,6 +17,7 @@
 
 import json
 from flask import Flask
+from flask_cors import CORS
 from gevent.wsgi import WSGIServer
 
 
@@ -29,6 +30,7 @@ class Webservice:
 
     def start(self):
         app = Flask("OPV-DirectoryManager")
+        CORS(app)
 
         @app.route("/v1/directory", methods=["POST"])
         def create_directory():
