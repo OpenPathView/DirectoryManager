@@ -20,7 +20,7 @@ import pip
 
 setup(
     name='opv_directorymanager',
-    version="0.1.0",
+    version="0.1.1",
     packages=find_packages(),
     author="Christophe NOUCHET",
     author_email="christophe.nouchet@openpathview.fr",
@@ -29,7 +29,8 @@ setup(
     install_requires=[
         "flask",
         "pyftpdlib",
-        "gevent"
+        "gevent",
+        "Flask-Cors"
     ],
     # Active la prise en compte du fichier MANIFEST.in
     include_package_data=False,
