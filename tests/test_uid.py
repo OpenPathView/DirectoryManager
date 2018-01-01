@@ -13,7 +13,8 @@
 # with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-from opv_directorymanager import UIDGenerator, BasicIDGenerator
+from zake import fake_client
+from opv_directorymanager import UIDGenerator, BasicIDGenerator, ZkIDGenerator
 import pytest
 import uuid
 import os
@@ -40,3 +41,25 @@ def test_basic_generator():
         toto = uid_test(i)
         assert(toto not in temp)
         temp.append(toto)
+
+
+def test_zookeeper():
+    """Test zookeeper backend for generate id"""
+    zk = fake_client.FakeClient()
+    zk.start()
+    test_zk = ZkIDGenerator(None, path="toto")
+
+    assert(test_zk.zk is None)
+    assert(test_zk.path == "toto")
+
+    test_zk.zk = zk
+    test_zk.path = "/DirectoryManager/increment"
+    assert (test_zk.zk == zk)
+    assert(test_zk.path == "/DirectoryManager/increment")
+
+    assert(test_zk.increment() == 1)
+    assert (test_zk.increment() == 2)
+    assert (test_zk.increment() == 3)
+    assert (test_zk.increment() == 4)
+
+    zk.stop()

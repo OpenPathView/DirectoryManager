@@ -24,7 +24,7 @@ class BasicIDGenerator(UIDGenerator):
     """
     Very simple uid generator with suffix that represent the luggage id
     """
-    def __init__(self, prefix):
+    def __init__(self, prefix=""):
         self.__prefix = prefix
         self.__lock = threading.Lock()
         self.__inc = 0
@@ -33,7 +33,22 @@ class BasicIDGenerator(UIDGenerator):
     def prefix(self):
         return self.__prefix
 
-    def getUID(self):
+    def increment(self):
+        """
+        Increment the UID
+        :return : Return the value incremented
+        """
+        self.__inc += 1
+        return self.__inc
+
+    def safe_increment(self):
+        """
+        Increment the UID with lock
+        :return : Return the value incremented
+        """
         with self.__lock:
-            self.__inc += 1
-            return "%s-%s-%s" % (self.prefix, self.__inc, str(uuid.uuid1()))
+            return self.increment()
+
+    def getUID(self):
+        """Get the new UID"""
+        return "%s%s-%s" % ("%s-" % self.prefix if self.prefix else "", self.safe_increment(), str(uuid.uuid1()))

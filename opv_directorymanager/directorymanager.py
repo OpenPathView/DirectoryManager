@@ -24,11 +24,12 @@ import os
 import configparser
 import socket
 import json
+from kazoo.client import KazooClient
 from opv_directorymanager import LocalStorage
 from opv_directorymanager import FTP
 from opv_directorymanager import HTTP
 from opv_directorymanager import LocalStorageService
-from opv_directorymanager import BasicIDGenerator
+from opv_directorymanager import BasicIDGenerator, ZkIDGenerator
 from opv_directorymanager import StorageServiceManager
 
 
@@ -66,6 +67,7 @@ class DirectoryManager:
         self.__path = config.get("OPV", "path", fallback="directory_manager_storage")
         self.__path = os.path.realpath(os.path.expanduser(self.__path))
         self.__host = config.get("OPV", "host", fallback=socket.gethostbyname(socket.gethostname()))
+        uid_generator_type = config.get("OPV", "uid_type", fallback="basic").upper()
 
         # FTP configuration
         ftp_host = config.get("FTP", "host", fallback="0.0.0.0")
@@ -78,7 +80,15 @@ class DirectoryManager:
         http_logfile = config.get("HTTP", "logfile", fallback="opv_directory_manager_http.log")
 
         # Id
-        self.__uid_generator = BasicIDGenerator(self.__id)
+        if uid_generator_type in ["ZOOKEEPER", "ZK"]:
+            zk_hosts = config.get("ZOOKEEPER", "hosts", fallback="127.0.0.1:2181")
+            zk_path = config.get("ZOOKEEPER", "path", fallback="/DirectoryManager/increment")
+            print(zk_hosts)
+            zk = KazooClient(zk_hosts)
+            zk.start()
+            self.__uid_generator = ZkIDGenerator(zk, path=zk_path, prefix=self.__id)
+        else:
+            self.__uid_generator = BasicIDGenerator(prefix=self.__id)
 
         # Storage
         self.__storage = LocalStorage(self.__path)
@@ -184,6 +194,9 @@ path=directory_manager_storage
 # Host to give with the URI. MUST BE THE HOST OF THE CURRENT COMPUTER!!!!
 # If none, will compute it.
 #host=toto.fr
+# To chosse the backend for the uid
+# Values can be [basic, zookeeper, zk]
+uid_type=basic
 
 # Storage Service
 [FTP]
@@ -195,4 +208,11 @@ logfile=opv_directory_manager_ftp.log
 host=0.0.0.0
 port=5050
 logfile=opv_directory_manager_http.log
+
+# If you choose uid_type=zk or uid_type=zookeeper
+[ZOOKEEPER]
+# Hosts to zookeeper cluster
+hosts=127.0.0.1:2181
+# Path to use on zookeeper
+path=/DirectoryManager/increment
 """
