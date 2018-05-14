@@ -27,7 +27,7 @@ setup(
     description="Open Path View Directory Manager",
     long_description=open('README.md').read(),
     install_requires=[
-        "flask",
+        "Flask>=1.0.2",
         "pyftpdlib",
         "gevent",
         "Flask-Cors"

@@ -24,7 +24,7 @@ from logging.handlers import RotatingFileHandler
 import os
 from flask import Flask, send_file
 from flask_cors import CORS
-from gevent.wsgi import WSGIServer
+from gevent.pywsgi import WSGIServer
 from opv_directorymanager.storage_service import StorageService
 
 HOST = socket.gethostbyname(socket.gethostname())
