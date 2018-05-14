@@ -22,6 +22,7 @@ import os
 
 import ftplib
 import io
+import time
 
 # For testing http
 import requests
@@ -139,6 +140,7 @@ def test_http(directory):
     # Test that service start
     http.start()
 
+    time.sleep(3)
     # Check service is running
     assert(http.is_running())
 

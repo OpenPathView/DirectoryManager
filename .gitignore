@@ -13,3 +13,4 @@ opv_directory_manager_http.log
 htmlcov/
 http.log
 .coverage.*
+venv/
