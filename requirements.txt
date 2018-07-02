@@ -13,6 +13,7 @@ greenlet==0.4.13
 idna==2.6
 itsdangerous==0.24
 Jinja2==2.10
+kazoo==2.4.0
 MarkupSafe==1.0
 more-itertools==4.1.0
 pkg-resources==0.0.0
@@ -29,3 +30,4 @@ requests-ftp==0.3.1
 six==1.11.0
 urllib3==1.22
 Werkzeug==0.14.1
+zake==0.2.2

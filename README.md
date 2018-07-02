@@ -72,6 +72,9 @@ path=directory_manager_storage
 # Host to give with the URI. MUST BE THE HOST OF THE CURRENT COMPUTER!!!!
 # If none, will compute it.
 #host=toto.fr
+# To chosse the backend for the uid
+# Values can be [basic, zookeeper, zk]
+uid_type=basic
 
 # Storage Service
 [FTP]
@@ -84,6 +87,13 @@ host=0.0.0.0
 port=5050
 logfile=opv_directory_manager_http.log
 
+# If you choose uid_type=zk or uid_type=zookeeper
+[ZOOKEEPER]
+# Hosts to zookeeper cluster
+hosts=127.0.0.1:2181
+
+# Path to use on zookeeper
+path=/DirectoryManager/increment
 ```
 
 Example: The following command will create a web interface listening on 127.0.0.1:5000 and a ftp server listening on 0.0.0.0:2121

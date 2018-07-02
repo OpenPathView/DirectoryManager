@@ -17,4 +17,5 @@
 
 from opv_directorymanager.uid.uid_generator import UIDGenerator
 from opv_directorymanager.uid.basic import BasicIDGenerator
+from opv_directorymanager.uid.zk_generator import ZkIDGenerator
 
