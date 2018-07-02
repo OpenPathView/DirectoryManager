@@ -18,7 +18,7 @@
 import json
 from flask import Flask
 from flask_cors import CORS
-from gevent.wsgi import WSGIServer
+from gevent.pywsgi import WSGIServer
 
 
 class Webservice:
