@@ -30,7 +30,8 @@ setup(
         "Flask>=1.0.2",
         "pyftpdlib",
         "gevent",
-        "Flask-Cors"
+        "Flask-Cors",
+        "kazoo"
     ],
     # Active la prise en compte du fichier MANIFEST.in
     include_package_data=False,
