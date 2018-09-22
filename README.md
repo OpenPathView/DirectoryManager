@@ -148,6 +148,19 @@ curl -X GET  http://127.0.0.1:5000/v1/ls
 ["ID-1-6f26e348-d77e-11e6-a52d-f46d0424e365"]
 ```
 
+### Generate a thumbnail
+The http access allow you to generate thumbnail using some http parameter.
+* scale : set a scale factor, ex if scale is equal to 2, the image will be reduce by 2
+* width : set image width, height will be computed
+* height : set image height, width will be computed
+
+```
+curl -X GET  'http://opv_master:5000/v1/files/uuid/panorama.jpg?scale=6'
+# Return cropped image
+```
+
+This parameters work on all image available thought the directory manager.
+
 ## Todo
 
 * Add log
