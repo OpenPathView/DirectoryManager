@@ -27,6 +27,7 @@ from PIL import Image
 import io
 from flask import Flask, send_file, request
 from flask_cors import CORS
+from flask_caching import Cache
 from gevent.pywsgi import WSGIServer
 from opv_directorymanager.storage_service import StorageService
 
@@ -58,8 +59,14 @@ class HTTP(StorageService):
         self._uri = "http://%s:%s%s" % (self.__host, self.__listen_port, self.__api)
         app = Flask("OPV-TuilesServer")
         CORS(app)
+        cache = Cache(app, config={'CACHE_TYPE': 'simple'})
+
+        def make_key():
+          """Make a key that includes GET parameters."""
+          return request.full_path
 
         @app.route(os.path.join(self.__api, "<path:name>"))
+        @cache.cached(timeout=50, key_prefix=make_key)
         def file_send(name):
             """
             Will create a directory in directory manager

@@ -33,7 +33,8 @@ setup(
         "Flask-Cors",
         "kazoo",
         "python-magic",
-        "Pillow"
+        "Pillow",
+        "flask-caching"
     ],
     # Active la prise en compte du fichier MANIFEST.in
     include_package_data=False,
