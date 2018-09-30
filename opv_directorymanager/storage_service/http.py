@@ -87,10 +87,10 @@ class HTTP(StorageService):
                     scale = request.args.get('scale', type=int)
                     size = [img.size[0]/scale, img.size[1]/scale]
                 elif request.args.get('width', type=int) is not None:
-                    size = [request.args.get('width', type=int), request.args.get('width', type=int) * img.size[0]/img.size[1]]
+                    size = [request.args.get('width', type=int), img.size[1]]
                 elif request.args.get('height', type=int) is not None:
-                    size = [request.args.get('height', type=int) * img.size[1]/img.size[0], request.args.get('height', type=int)]
-                img.thumbnail(size)
+                    size = [img.size[0], request.args.get('height', type=int)]
+                img.thumbnail(size)  # Automatically compute the image max size that can be contained into "size" preserving ratio
                 p = io.BytesIO()
                 img.save(p, "JPEG")
                 p.seek(0)
