@@ -31,3 +31,6 @@ six==1.11.0
 urllib3==1.22
 Werkzeug==0.14.1
 zake==0.2.2
+python-magic
+Pillow
+flask-caching

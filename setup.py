@@ -31,7 +31,10 @@ setup(
         "pyftpdlib",
         "gevent",
         "Flask-Cors",
-        "kazoo"
+        "kazoo",
+        "python-magic",
+        "Pillow",
+        "flask-caching"
     ],
     # Active la prise en compte du fichier MANIFEST.in
     include_package_data=False,

@@ -22,8 +22,12 @@ import logging
 import json
 from logging.handlers import RotatingFileHandler
 import os
-from flask import Flask, send_file
+import magic
+from PIL import Image
+import io
+from flask import Flask, send_file, request
 from flask_cors import CORS
+from flask_caching import Cache
 from gevent.pywsgi import WSGIServer
 from opv_directorymanager.storage_service import StorageService
 
@@ -55,8 +59,14 @@ class HTTP(StorageService):
         self._uri = "http://%s:%s%s" % (self.__host, self.__listen_port, self.__api)
         app = Flask("OPV-TuilesServer")
         CORS(app)
+        cache = Cache(app, config={'CACHE_TYPE': 'simple'})
+
+        def make_key():
+          """Make a key that includes GET parameters."""
+          return request.full_path
 
         @app.route(os.path.join(self.__api, "<path:name>"))
+        @cache.cached(timeout=50, key_prefix=make_key)
         def file_send(name):
             """
             Will create a directory in directory manager
@@ -69,6 +79,23 @@ class HTTP(StorageService):
             p = os.path.join(self.__path, "/".join(temp))
             if os.path.isdir(p):
                 return json.dumps(os.listdir(p))
+
+            if magic.from_file(p, mime=True).split("/")[0] == "image" and (request.args.get('scale') is not None or request.args.get('width') is not None or request.args.get('height') is not None):
+                img = Image.open(p)
+                size = [0, 0]
+                if request.args.get('scale', type=int) is not None:
+                    scale = request.args.get('scale', type=int)
+                    size = [img.size[0]/scale, img.size[1]/scale]
+                elif request.args.get('width', type=int) is not None:
+                    size = [request.args.get('width', type=int), img.size[1]]
+                elif request.args.get('height', type=int) is not None:
+                    size = [img.size[0], request.args.get('height', type=int)]
+                img.thumbnail(size)  # Automatically compute the image max size that can be contained into "size" preserving ratio
+                p = io.BytesIO()
+                img.save(p, "JPEG")
+                p.seek(0)
+                return send_file(p, mimetype='image/jpeg')
+
             return send_file(p)
 
         handler = RotatingFileHandler(self.__logfile, maxBytes=10000, backupCount=1)
