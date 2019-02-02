@@ -63,26 +63,34 @@ class DirectoryManager:
             config.read(os.path.realpath(config_file))
 
         # Main configuration
-        self.__id = config.get("OPV", "id", fallback="ID")
-        self.__path = config.get("OPV", "path", fallback="directory_manager_storage")
+        self.__id = config.get("OPV", "id", fallback=os.getenv("OPV_DM_ID", "ID"))
+        self.__path = config.get("OPV", "path", fallback=os.getenv("OPV_DM_PATH", "directory_manager_storage"))
         self.__path = os.path.realpath(os.path.expanduser(self.__path))
-        self.__host = config.get("OPV", "host", fallback=socket.gethostbyname(socket.gethostname()))
-        uid_generator_type = config.get("OPV", "uid_type", fallback="basic").upper()
+        self.__host = config.get(
+            "OPV", "host", fallback=os.getenv("OPV_DM_HOST", socket.gethostbyname(socket.gethostname()))
+        )
+        uid_generator_type = config.get("OPV", "uid_type", fallback=os.getenv("OPV_DM_UID_TYPE", "basic")).upper()
 
         # FTP configuration
-        ftp_host = config.get("FTP", "host", fallback="0.0.0.0")
-        ftp_port = config.getint("FTP", "port", fallback=2121)
-        ftp_logfile = config.get("FTP", "logfile", fallback="opv_directory_manager_ftp.log")
+        ftp_host = config.get("FTP", "host", fallback=os.getenv("OPV_DM_FTP_HOST", "0.0.0.0"))
+        ftp_port = config.getint("FTP", "port", fallback=int(os.getenv("OPV_DM_FTP_PORT", 2121)))
+        ftp_logfile = config.get(
+            "FTP", "logfile", fallback=os.getenv("OPV_DM_FTP_LOGFILE", "opv_directory_manager_ftp.log")
+        )
 
         # HTTP configuration
-        http_host = config.get("HTTP", "host", fallback="0.0.0.0")
-        http_port = config.getint("HTTP", "port", fallback=5050)
-        http_logfile = config.get("HTTP", "logfile", fallback="opv_directory_manager_http.log")
+        http_host = config.get("HTTP", "host", fallback=os.getenv("OPV_DM_HTTP_HOST", "0.0.0.0"))
+        http_port = config.getint("HTTP", "port", fallback=int(os.getenv("OPV_DM_HTTP_PORT", 5050)))
+        http_logfile = config.get(
+            "HTTP", "logfile", fallback=os.getenv("OPV_DM_HTTP_LOGFILE", "opv_directory_manager_http.log")
+        )
 
         # Id
         if uid_generator_type in ["ZOOKEEPER", "ZK"]:
-            zk_hosts = config.get("ZOOKEEPER", "hosts", fallback="127.0.0.1:2181")
-            zk_path = config.get("ZOOKEEPER", "path", fallback="/DirectoryManager/increment")
+            zk_hosts = config.get("ZOOKEEPER", "hosts", fallback=os.getenv("OPV_DM_ZK_HOSTS", "127.0.0.1:2181"))
+            zk_path = config.get(
+                "ZOOKEEPER", "path", fallback=os.getenv("OPV_DM_ZK_PATH", "/DirectoryManager/increment")
+            )
             print(zk_hosts)
             zk = KazooClient(zk_hosts)
             zk.start()

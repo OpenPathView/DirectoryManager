@@ -44,5 +44,11 @@ setup(
         "bin/opv_dm_web.py"
     ],
 
+    entry_points={
+        'console_scripts': [
+            'opv-dm_web = opv_directorymanager.__main__:main'
+        ]
+    },
+
     license="GPL3",
 )

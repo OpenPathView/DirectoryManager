@@ -30,6 +30,25 @@ This software is compose by:
 
 ## I want to play with it
 
+
+### Docker
+
+```bash
+docker build -t directorymanager -f Dockerfile .
+```
+
+You should consider using volume and map it as /mnt/dm
+
+```bash
+docker volume create dm
+```
+
+Launch the image
+
+```bash
+docker run -it -p 2121:2121 -p 5000:5000 -p 5050:5050 -v dm:/mnt/dm --rm directorymanager
+```
+
 You should consider to install it in a virtualenv.
 
 ### I want to install it

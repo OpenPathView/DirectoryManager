@@ -18,41 +18,9 @@
 # Description: This is the tests webinterface for the directory manager of Open Path View don't use this piece of sh*t
 # for production!
 
-import argparse
-from opv_directorymanager import Webservice, default_config
-from opv_directorymanager import DirectoryManager
+from opv_directorymanager.__main__ import main
 
 if __name__ == "__main__":
 
-    # Argparser setup
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-c", "--configfile", dest="configfile", type=str, default=None,
-        help="Specify configuration file for OPV Directory Manager"
-    )
-    parser.add_argument("-o", "--host", dest="host", type=str, default="0.0.0.0", help="Host to listen to")
-    parser.add_argument("-p", "--port", dest="port", type=int, default=5000, help="Port to listen to")
-    parser.add_argument(
-        "-s", "--showConfigExample", action="store_true", dest="showMeExample",
-        help="Show me a configuration file example"
-    )
-    args = parser.parse_args()
-
-    # Show config file example if ask
-    if args.showMeExample:
-        print(default_config)
-        exit(0)
-
-    # Create directory manager
-    dm = DirectoryManager()
-    # Read config file
-    dm.read_config_file(config_file=args.configfile)
-    # Start storage services
-    dm.start_storage_service()
-
-    # Webservice
-    web = Webservice(dm, args.host, args.port)
-
-    # Start webservice
-    web.start()
+    main()
 
