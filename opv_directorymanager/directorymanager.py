@@ -169,7 +169,7 @@ class DirectoryManager:
 
         return uid
 
-    def directory(self, directory, protocol=None):
+    def directory(self, directory, protocol=None, no_host=False):
         """
         Get or set a directory
         :param directory: The directory to get, if none will create a directory
@@ -180,7 +180,7 @@ class DirectoryManager:
         if directory is None or directory == "" or not self.__storage.exist(directory):
             return None
         else:
-            return os.path.join(self.__storage_service_manager.getURI(protocol).uri, directory)
+            return os.path.join(self.__storage_service_manager.getURI(protocol).uri(no_host), directory)
 
     def ls(self):
         """

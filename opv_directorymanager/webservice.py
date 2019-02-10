@@ -17,6 +17,7 @@
 
 import json
 from flask import Flask
+from flask import request
 from flask_cors import CORS
 from gevent.pywsgi import WSGIServer
 
@@ -53,7 +54,10 @@ class Webservice:
             :return: the URI to the directory
             """
             try:
-                return json.dumps(self.__directory_manager.directory(uid, protocol))
+                print(request.headers)
+                no_host = bool(request.headers["no-host"]) if "no-host" in request.headers else False
+                print(no_host)
+                return json.dumps(self.__directory_manager.directory(uid, protocol, no_host))
             except Exception as e:
                 return str(e), 500
 

@@ -56,7 +56,6 @@ class HTTP(StorageService):
         self.__listen_port = listen_port
         self.__logfile = logfile
         self.__api = "/v1/files/"
-        self._uri = "http://%s:%s%s" % (self.__host, self.__listen_port, self.__api)
         app = Flask("OPV-TuilesServer")
         CORS(app)
         cache = Cache(app, config={'CACHE_TYPE': 'simple'})
@@ -110,3 +109,14 @@ class HTTP(StorageService):
         """
         http_server = WSGIServer((self.__listen_host, self.__listen_port), self.__app)
         http_server.serve_forever()
+
+    def uri(self, no_host=False):
+        """
+        :param ho_host:
+        :return:
+        """
+        return "http://%s:%s%s" % (
+            self.__host if no_host is False else "{host}",
+            self.__listen_port,
+            self.__api
+        )

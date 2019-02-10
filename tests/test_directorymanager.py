@@ -108,7 +108,7 @@ def test_directory_manager(conf_file, directory):
     path, port = directory
     ftp = FTP(path, host="127.0.0.1", listen_host="127.0.0.1", listen_port=port)
     local = LocalStorageService(path)
-    assert (ftp.uri == "ftp://%s:%s/" % ("127.0.0.1", port))
+    assert (ftp.uri() == "ftp://%s:%s/" % ("127.0.0.1", port))
 
     storage_m = StorageServiceManager("ftp", ftp)
     storage_m.addURI("file", local)

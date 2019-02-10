@@ -67,8 +67,7 @@ class StorageService:
         """
         return self.__process.is_alive()
 
-    @property
-    def uri(self):
+    def uri(self, no_host=False):
         if self._uri is None:
             raise NotImplementedError
         return self._uri

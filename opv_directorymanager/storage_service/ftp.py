@@ -73,3 +73,15 @@ class FTP(StorageService):
         """
         logging.basicConfig(filename=self.__logfile, level=logging.INFO)
         self.__server.serve_forever()
+
+    def make_uri(self, no_host=False):
+        """Make the URI"""
+        host = "{host}" if no_host is True else self.__host
+        if self.__user is not None and self.__password is not None:
+            return "ftp://%s:%s@%s:%s/" % (self.__user, self.__password, host, self.__listen_port)
+        else:
+            return "ftp://%s:%s/" % (host, self.__listen_port)
+
+    def uri(self, no_host=False):
+        """Get the URI"""
+        return self.make_uri(no_host)

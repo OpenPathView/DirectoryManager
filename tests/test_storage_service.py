@@ -87,7 +87,7 @@ def test_storage_services(directory):
     assert(storage_service.stop() is False)
     assert(storage_service.is_running() is False)
     with pytest.raises(NotImplementedError):
-        toto = storage_service.uri
+        toto = storage_service.uri()
 
 
 def test_local_storage_services(directory):
@@ -96,14 +96,15 @@ def test_local_storage_services(directory):
     assert(storage_service.start() is False)
     assert (storage_service.stop() is False)
     assert (storage_service.is_running() is False)
-    assert(storage_service.uri == "file://%s" % path)
+    assert(storage_service.uri() == "file://%s" % path)
 
 
 def test_ftp(directory):
     path, port = directory
     ftp = FTP(path, host="127.0.0.1", listen_host="127.0.0.1", listen_port=port)
 
-    assert(ftp.uri == "ftp://%s:%s/" % ("127.0.0.1", port))
+    assert(ftp.uri() == "ftp://%s:%s/" % ("127.0.0.1", port))
+    assert (ftp.uri(no_host=True) == "ftp://{host}:%s/" % port)
 
     # Test that service start
     ftp.start()
@@ -119,7 +120,7 @@ def test_ftp(directory):
     requests_ftp.monkeypatch_session()
     s = requests.Session()
 
-    r = s.retr("%s%s" % (ftp.uri, "toto.txt"))
+    r = s.retr("%s%s" % (ftp.uri(), "toto.txt"))
 
     assert(r.status_code == 226)
     assert(r.text == CONTENT_TEST)
@@ -135,7 +136,9 @@ def test_http(directory):
     http = HTTP(path, host="127.0.0.1", listen_host="127.0.0.1", listen_port=port)
 
     addr = "http://%s:%s/v1/files/" % ("127.0.0.1", port)
-    assert (http.uri == addr)
+    addr2 = "http://{host}:%s/v1/files/" % port
+    assert (http.uri() == addr)
+    assert (http.uri(no_host=True) == addr2)
 
     # Test that service start
     http.start()
