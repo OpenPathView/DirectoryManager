@@ -34,7 +34,8 @@ setup(
         "kazoo",
         "python-magic",
         "Pillow",
-        "flask-caching"
+        "flask-caching",
+        "flasgger"
     ],
     # Active la prise en compte du fichier MANIFEST.in
     include_package_data=False,
