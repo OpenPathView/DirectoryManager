@@ -1,4 +1,4 @@
-FROM python
+FROM python:3.6
 
 ENV OPV_DM_PATH /mnt/dm
 ENV OPV_DM_PORT 5000
