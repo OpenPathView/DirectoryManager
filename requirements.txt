@@ -33,5 +33,5 @@ requests==2.19.1
 requests-ftp==0.3.1
 six==1.11.0
 urllib3==1.23
-Werkzeug==0.14.1
+Werkzeug==0.15.3
 zake==0.2.2
